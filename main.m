@@ -26,11 +26,9 @@ model.LTL_path(end+1,:) = model.goals_XY(1,:);
 toc;
                                                 %%  Known Environment with A* %%
 model.astar_path = AStar(model,map_LTL,mapName);
-% model.astar_path = [model.astar_path(:,2),map.GridSize(1,2)-model.astar_path(:,1)];
 
-%                                                 %%  Known Environment with RRT* %%
-% model.astar_path = AStar(model,map,mapName);
-% model.astar_path = [model.astar_path(:,2),map.GridSize(1,2)-model.astar_path(:,1)];
+                                              %%  Known Environment with RRT* %%
+model.rrtstar_path = RRT_star(model,map_LTL,mapName);
 
 
                                             %% Get Robustness and Prediction Horizon %%
@@ -78,6 +76,7 @@ plot(LTL_path(size(model.goals,3)+1:end,1),LTL_path(size(model.goals,3)+1:end,2)
 plot(model.init_pos(1,1),model.init_pos(1,2),'.','MarkerSize',30)
 plot(model.STL_path(1,:),model.STL_path(2,:),'r','LineWidth',3)
 plot(model.astar_path(:,2),map.GridSize(1,1)-model.astar_path(:,1),'--k','LineWidth',1.5)
+plot(model.rrtstar_path(:,1),model.rrtstar_path(:,2),'--g','LineWidth',1.5)
 title('LTL and STL Safe Path Planning')
 
 hold off
