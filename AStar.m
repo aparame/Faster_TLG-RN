@@ -1,6 +1,6 @@
 function astar_path_ex = AStar(model,map,mapName)
 show(map);
-goals = model.goals;
+goals = flip(model.goals,3);
 init_pos = model.init_pos;
 if strcmp('simpleMap',mapName)
     init_pos_a_star = round([init_pos(:,1),map.GridSize(1,2)-init_pos(:,2)]);

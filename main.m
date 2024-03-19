@@ -12,34 +12,35 @@ close all
 
 model = robot_system_description();
 model.robot_r = 1/2; % 0.5m robot radius;
-                                                %% Known Environment with LTL only %%
+%% Known Environment with LTL only %%
 % select_map{map_string, custom/inbuilt example, unknown obstacle trigger(0/1)}
 % astar_path is a function to calculate the Astar path based on the known
 % map, initial positions and the goal
-mapName = 'complexMap';
-[map,map_LTL,model] = select_map(model,mapName,'custom',0);   % 'simple' and 'custom/built-in'
+mapName = 'simpleMap';
+[map,map_LTL,model] = select_map(model,mapName,'built-in',0);   % 'simple' and 'custom/built-in'
 
 tic;
 [model,LTL_path] = LTL_Planning(model);
 model.LTL_path = LTL_path(3:end,:);
 model.LTL_path(end+1,:) = model.goals_XY(1,:);
-toc;
-                                                %%  Known Environment with A* %%
+fprintf('LTL elapsed time is: %.2f seconds. \n',toc')
+%%  Known Environment with A* %%
+tic;
 model.astar_path = AStar(model,map_LTL,mapName);
-
-                                              %%  Known Environment with RRT* %%
+fprintf('AStar elapsed time is: %.2f seconds. \n',toc')
+%%  Known Environment with RRT* %%
+tic;
 model.rrtstar_path = RRT_star(model,map_LTL,mapName);
-
-
-                                            %% Get Robustness and Prediction Horizon %%
+fprintf('RRT Star elapsed time is: %.2f seconds. \n',toc')
+%% Get Robustness and Prediction Horizon %%
 rho_req = 2;
 [model.min_rob,model.sdm] = get_robustness(model.LTL_path,map);     % STL spec min_d[t] > 2
 model.ds = 1;
 
-                                         %% Known Environment with LTL and STL based Path Planning (second step)
+%% Known Environment with LTL and STL based Path Planning (second step)
 
 % Setting up pre-requisities
-model.hor_length = (size(model.LTL_path,1)-1)/model.ds;             
+model.hor_length = (size(model.LTL_path,1)-1)/model.ds;
 model.u0.min = model.u0.min(:,ones(1,model.hor_length+1)); % minimum control input ---> set in system description code
 model.u0.max = model.u0.max(:,ones(1,model.hor_length+1)); % maximum control input
 
@@ -48,7 +49,7 @@ tic;
 model = generate_STL_path(model,map);
 model.STL_path = model.solutions{1,3};
 
-toc;
+fprintf('MILP solver elapsed time is: %.2f seconds. \n',toc')
 
 
 %% Running the MPC simulation %%
@@ -67,7 +68,7 @@ for ii = 1:size(model.goals,3)
     fill(model.goals(:,1,ii),model.goals(:,2,ii),[0 0.5 0]);
 end
 for ii = 1:model.n_obs
-    fill(model.obs(:,1,ii),model.obs(:,2,ii),[0 0 0]);  
+    fill(model.obs(:,1,ii),model.obs(:,2,ii),[0 0 0]);
 end
 % LTL Path (Red)
 plot(LTL_path(2,1),LTL_path(2,2),'ko',LTL_path(end,1),LTL_path(end,2),'k^',...
@@ -75,34 +76,15 @@ plot(LTL_path(2,1),LTL_path(2,2),'ko',LTL_path(end,1),LTL_path(end,2),'k^',...
 plot(LTL_path(size(model.goals,3)+1:end,1),LTL_path(size(model.goals,3)+1:end,2),'b','LineWidth',3);
 plot(model.init_pos(1,1),model.init_pos(1,2),'.','MarkerSize',30)
 plot(model.STL_path(1,:),model.STL_path(2,:),'r','LineWidth',3)
-plot(model.astar_path(:,2),map.GridSize(1,1)-model.astar_path(:,1),'--k','LineWidth',1.5)
-plot(model.rrtstar_path(:,1),model.rrtstar_path(:,2),'--g','LineWidth',1.5)
+plot(model.astar_path(:,2),map.GridSize(1,1)-model.astar_path(:,1),'--k','LineWidth',2.5)
+plot(model.rrtstar_path(:,1),model.rrtstar_path(:,2),'--m','LineWidth',2.5)
 title('LTL and STL Safe Path Planning')
 
 hold off
 
-                                            %% Get Robustness for STL %%
+%% Get Robustness for STL %%
 
 [model.min_rob,model.sdm] = get_robustness(model.STL_path',map);     % STL spec min_d[t] > 2
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

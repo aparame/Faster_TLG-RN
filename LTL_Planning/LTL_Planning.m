@@ -83,13 +83,13 @@ while isempty(cPath) || length(cPath) < 50
 
     gridChunk = getChunk(start, goals, model.gridWidth, model.gridHeight,expansion);
 
-    hold on
-    rectangle('Position',[gridChunk(1)-.5, gridChunk(3)-.5, ...
-        gridChunk(2)-gridChunk(1)+1, gridChunk(4)-gridChunk(3)+1],...
-        'LineWidth',6)
-    hold off
-
-    pause(.1)
+    % hold on
+    % rectangle('Position',[gridChunk(1)-.5, gridChunk(3)-.5, ...
+    %     gridChunk(2)-gridChunk(1)+1, gridChunk(4)-gridChunk(3)+1],...
+    %     'LineWidth',6)
+    % hold off
+    % 
+    % pause(.1)
 
     makeSMV_v2(fileName, model.gridWidth, model.gridHeight, gridChunk, start, sensedObstacles, ltlspec);
 
