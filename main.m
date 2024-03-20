@@ -64,21 +64,26 @@ arrow_distance = 8;
 figure(2)
 show(map)
 hold on
+
+% LTL Path (Red)
+p1 = plot(model.astar_path(:,2),map.GridSize(1,1)-model.astar_path(:,1),'--k','LineWidth',1.5);
+p2 = plot(model.rrtstar_path(:,1),model.rrtstar_path(:,2),'--m','LineWidth',1.5);
+
+p3 = plot(LTL_path(size(model.goals,3)+1:end,1),LTL_path(size(model.goals,3)+1:end,2),'b','LineWidth',1.5);
+p4 = plot(model.STL_path(1,:),model.STL_path(2,:),'r','LineWidth',1.5);
+legend('A*', 'RRT*','LTL','LTL + MILP','AutoUpdate','off')
+
 for ii = 1:size(model.goals,3)
     fill(model.goals(:,1,ii),model.goals(:,2,ii),[0 0.5 0]);
 end
-for ii = 1:model.n_obs
-    fill(model.obs(:,1,ii),model.obs(:,2,ii),[0 0 0]);
-end
-% LTL Path (Red)
-plot(LTL_path(2,1),LTL_path(2,2),'ko',LTL_path(end,1),LTL_path(end,2),'k^',...
-    'MarkerSize',6);
-plot(LTL_path(size(model.goals,3)+1:end,1),LTL_path(size(model.goals,3)+1:end,2),'b','LineWidth',3);
+
 plot(model.init_pos(1,1),model.init_pos(1,2),'.','MarkerSize',30)
-plot(model.STL_path(1,:),model.STL_path(2,:),'r','LineWidth',3)
-plot(model.astar_path(:,2),map.GridSize(1,1)-model.astar_path(:,1),'--k','LineWidth',2.5)
-plot(model.rrtstar_path(:,1),model.rrtstar_path(:,2),'--m','LineWidth',2.5)
-title('LTL and STL Safe Path Planning')
+
+
+
+title('Path Planners comparison (Simple Map)')
+
+
 
 hold off
 
