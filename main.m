@@ -16,7 +16,7 @@ model.robot_r = 1/2; % 0.5m robot radius;
 % select_map{map_string, custom/inbuilt example, unknown obstacle trigger(0/1)}
 % astar_path is a function to calculate the Astar path based on the known
 % map, initial positions and the goal
-mapName = 'complexMap';
+mapName = 'simpleMap';
 [map,map_LTL,model] = select_map(model,mapName,'custom',0);   % 'simple' and 'custom/built-in'
 
 tic;
@@ -71,15 +71,13 @@ end
 plot(model.init_pos(1,1),model.init_pos(1,2),'.','MarkerSize',30)
 
 % LTL Path (Red)
-p1 = plot(model.astar_path(:,2),map.GridSize(1,1)-model.astar_path(:,1),'--k','LineWidth',1.5, 'DisplayName','A*');
+p1 = plot(model.astar_path(:,2),map.GridSize(1,2)-model.astar_path(:,1),'--k','LineWidth',1.5, 'DisplayName','A*');
 p2 = plot(model.rrtstar_path(:,1),model.rrtstar_path(:,2),'--m','LineWidth',1.5,'DisplayName','RRT*');
 
 p3 = plot(LTL_path(size(model.goals,3)+1:end,1),LTL_path(size(model.goals,3)+1:end,2),'b','LineWidth',1.5,'DisplayName','LTL');
 p4 = plot(model.STL_path(1,:),model.STL_path(2,:),'r','LineWidth',1.5,'DisplayName','LTL + MILP');
 legend([p1,p2,p3,p4])
 title('Path Planners comparison (Simple Map)')
-
-
 
 hold off
 

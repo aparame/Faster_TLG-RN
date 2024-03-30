@@ -44,7 +44,7 @@ cPath = [];
 
 
 expansion = -1;
-while isempty(cPath) || length(cPath) < 50
+while isempty(cPath) || length(cPath) < 40
 
     expansion = expansion + 1;
 

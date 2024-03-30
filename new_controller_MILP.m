@@ -15,7 +15,7 @@ rem_hor_length = sdpvar(1,1); % remaining horizon length
 
 %% initialize constraints and objective
 % Weights for cost Function %
-Q_1 = 5;   % weight function for velocity
+Q_1 = 7;   % weight function for velocity
 Q_2 = 0.4*eye(2);    % weight matrix for states
 uVec = [u{:}];
 objective = Q_1*sum(sum(abs(uVec)));    %objective function is to minimize the control inputs aka the robot velocity
