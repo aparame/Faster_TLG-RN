@@ -71,18 +71,25 @@ if strcmp('custom',goal_selector)
     end
 
 elseif strcmp('built-in',goal_selector)
-    for ii = 1:2
-        goals(:,:,1) = [44,6;
-            44,10;
-            48,10;
-            48,6];
-        goals(:,:,2) = [44,18;
-            44,22;
-            48,22;
-            48,18];
-        fill(goals(:,1,ii),goals(:,2,ii),[0 0.5 0]);
+    % for ii = 1:2
+    %     goals(:,:,1) = [44,6;
+    %         44,10;
+    %         48,10;
+    %         48,6];
+    %     goals(:,:,2) = [44,18;
+    %         44,22;
+    %         48,22;
+    %         48,18];
+    %     fill(goals(:,1,ii),goals(:,2,ii),[0 0.5 0]);
 
-    end
+    %Single Goal%
+    goals(:,:,1) = [44,6;
+        44,10;
+        48,10;
+        48,6];
+    fill(goals(:,1,1),goals(:,2,1),[0 0.5 0]);
+
+    % end
     init_pos = [7,5];
     plot(init_pos(1,1),init_pos(1,2),'.','MarkerSize',30);
 end

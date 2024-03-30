@@ -17,7 +17,7 @@ model.robot_r = 1/2; % 0.5m robot radius;
 % astar_path is a function to calculate the Astar path based on the known
 % map, initial positions and the goal
 mapName = 'simpleMap';
-[map,map_LTL,model] = select_map(model,mapName,'custom',0);   % 'simple' and 'custom/built-in'
+[map,map_LTL,model] = select_map(model,mapName,'built-in',0);   % 'simple' and 'custom/built-in'
 
 tic;
 [model,LTL_path] = LTL_Planning(model);
