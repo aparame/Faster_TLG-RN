@@ -48,11 +48,36 @@ model.u0.max = model.u0.max(:,ones(1,model.hor_length+1)); % maximum control inp
 
 tic;
 % MILP Problem solver
-model = generate_STL_path(model,map);
+model = generate_STL_path(model,map,model.LTL_path);
 model.STL_path = model.solutions{1,3};
 
-fprintf('MILP solver elapsed time is: %.2f seconds. \n',toc')
+fprintf('MILP +LTL solver elapsed time is: %.2f seconds. \n',toc')
+%% Known Environment with A* and STL based Path Planning (second step)
 
+% Setting up pre-requisities
+model.hor_length = (size(model.astar_path,1)-1)/model.ds;
+model.u0.min = model.u0.min(:,ones(1,model.hor_length+1)); % minimum control input ---> set in system description code
+model.u0.max = model.u0.max(:,ones(1,model.hor_length+1)); % maximum control input
+
+tic;
+% MILP Problem solver
+model = generate_STL_path(model,map,model.astar_path);
+model.STL_Astar_path = model.solutions{1,3};
+
+fprintf('MILP + A* solver elapsed time is: %.2f seconds. \n',toc')
+%% Known Environment with RRT* and STL based Path Planning (second step)
+
+% Setting up pre-requisities
+model.hor_length = (size(model.rrtstar_path,1)-1)/model.ds;
+model.u0.min = model.u0.min(:,ones(1,model.hor_length+1)); % minimum control input ---> set in system description code
+model.u0.max = model.u0.max(:,ones(1,model.hor_length+1)); % maximum control input
+
+tic;
+% MILP Problem solver
+model = generate_STL_path(model,map,model.rrtstar_path);
+model.STL_RRT_path = model.solutions{1,3};
+
+fprintf('MILP + RRT* solver elapsed time is: %.2f seconds. \n',toc')
 
 %% Running the MPC simulation %%
 close all
@@ -72,8 +97,8 @@ end
 
 plot(model.init_pos(1,1),model.init_pos(1,2),'.','MarkerSize',30)
 
-p1 = plot(model.astar_path(:,1),model.astar_path(:,2),'--k','LineWidth',1.5, 'DisplayName','A*'); 
-p2 = plot(model.rrtstar_path(:,1),model.rrtstar_path(:,2),'--m','LineWidth',1.5,'DisplayName','RRT*');
+p1 = plot(model.STL_Astar_path(1,:),model.STL_Astar_path(2,:),'--k','LineWidth',1.5, 'DisplayName','A*'); 
+p2 = plot(model.STL_RRT_path(1,:),model.STL_RRT_path(2,:),'--m','LineWidth',1.5,'DisplayName','RRT*');
 p3 = plot(LTL_path(size(model.goals,3)+1:end,1),LTL_path(size(model.goals,3)+1:end,2),'b','LineWidth',1.5,'DisplayName','LTL');
 p4 = plot(model.STL_path(1,:),model.STL_path(2,:),'r','LineWidth',1.5,'DisplayName','LTL + MILP');
 legend([p1,p2,p3,p4])
@@ -93,15 +118,19 @@ r3 = plot(model.min_dis,'b','LineWidth',1.5,'DisplayName','LTL');
 r4 = plot(model.min_dis,'r','LineWidth',1.5,'DisplayName','LTL + MILP');
 
 
-[model.min_dis,model.min_rho] = get_robustness(model.astar_path,map);     % STL spec min_d[t] > 1
+[model.min_dis,model.min_rho] = get_robustness(model.STL_Astar_path',map);     % STL spec min_d[t] > 1
 r1 = plot(model.min_dis,'--k','LineWidth',1.5, 'DisplayName','A*');
-[model.min_dis,model.min_rho] = get_robustness(model.rrtstar_path,map);     % STL spec min_d[t] > 1
+[model.min_dis,model.min_rho] = get_robustness(model.STL_RRT_path',map);     % STL spec min_d[t] > 1
 r2 = plot(model.min_dis,'--m','LineWidth',1.5,'DisplayName','RRT*');
 plot(xlim, [1 1]*1, '--k','LineWidth',1.5)
 plot(xlim, [0 0]*1, '--r','LineWidth',1.5)
 legend([r1,r2,r3,r4])
 title('Safety Robustness')
-xlim([0,275])
+if strcmp('simpleMap',mapName)
+    xlim([0,150])
+else
+    xlim([0,275])
+end
 xlabel('Robustness')
 ylabel('Time Stamps (s)')
 

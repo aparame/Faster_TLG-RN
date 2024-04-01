@@ -6,7 +6,7 @@ function controller = new_controller_MILP(model)
 u = sdpvar(repmat(model.n_inputs,1, model.hor_length + 1),ones(1,model.hor_length + 1)); % control signal variable
 x = sdpvar(repmat(model.n,1, model.hor_length+2),ones(1,model.hor_length+2)); % state space variable
 y = sdpvar(repmat(model.n_outputs,1, model.hor_length + 1),ones(1,model.hor_length + 1)); % output variable
-LTL_path = sdpvar(repmat(2,1, model.hor_length + 1),ones(1,model.hor_length + 1)); % LTL_path variable
+path = sdpvar(repmat(2,1, model.hor_length + 1),ones(1,model.hor_length + 1)); % LTL_path variable
 w = sdpvar(repmat(model.n_inputs,1, model.hor_length + 1),ones(1,model.hor_length + 1));
 
 x_cur = sdpvar(model.n,1); % current state of the system
@@ -53,12 +53,12 @@ for k = 1:model.hor_length+1
 
     % Objective function to minimize contorl input and stay close to track
 
-    objective = objective + norm(Q_2*(y{k} - LTL_path{k}),1);
+    objective = objective + norm(Q_2*(y{k} - path{k}),1);
 end
 
 
 % define what the controller inputs are
-parameters_in = {x_cur, rem_hor_length,[LTL_path{:}]};
+parameters_in = {x_cur, rem_hor_length,[path{:}]};
 
 % define what the controller outputs are
 solutions_out = {[u{:}], [x{:}], [y{:}]};

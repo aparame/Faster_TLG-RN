@@ -1,4 +1,4 @@
-function model = generate_STL_path(model,map)
+function model = generate_STL_path(model,map,path)
 % argvout = GENERATE_CRITICAL_CONSTRAINTS_MILP(model) identifies all the critical
 % constraints that need to be activated for the known environment in an
 % open-loop fashion and encodes the MILP controller
@@ -38,7 +38,7 @@ rho_req = 2; %minimum robustness requirement
 %===========================================================================
 
 % solve the optimization problem
-[solutions,diagnostics] = model.controller{{x_cur(:),model.hor_length+1,model.LTL_path'}};
+[solutions,diagnostics] = model.controller{{x_cur(:),model.hor_length+1,path'}};
 
 
 % proceed if feasible
