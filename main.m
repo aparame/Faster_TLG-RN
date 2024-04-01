@@ -16,8 +16,8 @@ model.robot_r = 1/2; % 0.5m robot radius;
 % select_map{map_string, custom/inbuilt example, unknown obstacle trigger(0/1)}
 % astar_path is a function to calculate the Astar path based on the known
 % map, initial positions and the goal
-mapName = 'simpleMap';
-[map,map_LTL,model] = select_map(model,mapName,'built-in',0);   % 'simple' and 'custom/built-in'
+mapName = 'complexMap';
+[map,map_LTL,model] = select_map(model,mapName,'custom',0);   % 'simple' and 'custom/built-in'
 
 tic;
 [model,LTL_path] = LTL_Planning(model);
@@ -83,7 +83,7 @@ fprintf('MILP + RRT* solver elapsed time is: %.2f seconds. \n',toc')
 close all
 % model.movieName = input('Type in the name of the gif file');
 % model.movieName = 2;
-model = MPC_plotting(model,map);
+% model = MPC_plotting(model,map);
 
 
 %% Plot all Paths %%
@@ -97,10 +97,10 @@ end
 
 plot(model.init_pos(1,1),model.init_pos(1,2),'.','MarkerSize',30)
 
-p1 = plot(model.STL_Astar_path(1,:),model.STL_Astar_path(2,:),'--k','LineWidth',1.5, 'DisplayName','A*'); 
-p2 = plot(model.STL_RRT_path(1,:),model.STL_RRT_path(2,:),'--m','LineWidth',1.5,'DisplayName','RRT*');
-p3 = plot(LTL_path(size(model.goals,3)+1:end,1),LTL_path(size(model.goals,3)+1:end,2),'b','LineWidth',1.5,'DisplayName','LTL');
-p4 = plot(model.STL_path(1,:),model.STL_path(2,:),'r','LineWidth',1.5,'DisplayName','LTL + MILP');
+p1 = plot(model.STL_Astar_path(1,:),model.STL_Astar_path(2,:),'--k','LineWidth',1.2, 'DisplayName','A*'); 
+p2 = plot(model.STL_RRT_path(1,:),model.STL_RRT_path(2,:),'--m','LineWidth',1.2,'DisplayName','RRT*');
+p3 = plot(LTL_path(size(model.goals,3)+1:end,1),LTL_path(size(model.goals,3)+1:end,2),'b','LineWidth',1.2,'DisplayName','LTL');
+p4 = plot(model.STL_path(1,:),model.STL_path(2,:),'r','LineWidth',1.2,'DisplayName','LTL + MILP');
 legend([p1,p2,p3,p4])
 title('Path Planners comparison (Simple Map)')
 
@@ -113,26 +113,28 @@ dim = [0.6,0.8,0,0.1];
 figure(3)
 hold on;
 [model.min_dis,model.min_rho] = get_robustness(model.LTL_path,map);     % STL spec min_d[t] > 1
-r3 = plot(model.min_dis,'b','LineWidth',1.5,'DisplayName','LTL');
+r3 = plot(model.min_dis,'b','LineWidth',1.2,'DisplayName','LTL');
 [model.min_dis,model.min_rho] = get_robustness(model.STL_path',map);     % STL spec min_d[t] > 1
-r4 = plot(model.min_dis,'r','LineWidth',1.5,'DisplayName','LTL + MILP');
+r4 = plot(model.min_dis,'r','LineWidth',1.2,'DisplayName','LTL + MILP');
 
 
 [model.min_dis,model.min_rho] = get_robustness(model.STL_Astar_path',map);     % STL spec min_d[t] > 1
-r1 = plot(model.min_dis,'--k','LineWidth',1.5, 'DisplayName','A*');
+r1 = plot(model.min_dis,'--k','LineWidth',1.2, 'DisplayName','A*');
 [model.min_dis,model.min_rho] = get_robustness(model.STL_RRT_path',map);     % STL spec min_d[t] > 1
-r2 = plot(model.min_dis,'--m','LineWidth',1.5,'DisplayName','RRT*');
-plot(xlim, [1 1]*1, '--k','LineWidth',1.5)
-plot(xlim, [0 0]*1, '--r','LineWidth',1.5)
-legend([r1,r2,r3,r4])
+r2 = plot(model.min_dis,'--m','LineWidth',1.2,'DisplayName','RRT*');
+r5 = plot(xlim, [1 1]*1, '--c','LineWidth',1.5,'DisplayName','Min safety \rho_{min}');
+% plot(xlim, [0 0]*1, '--r','LineWidth',1.5)
+legend([r1,r2,r3,r4,r5])
 title('Safety Robustness')
 if strcmp('simpleMap',mapName)
-    xlim([0,150])
+    xlim([0,90])
+    ylabel('Robustness \rho(\phi_1)')
 else
     xlim([0,275])
+    ylabel('Robustness \rho(\phi_2)')
 end
-xlabel('Robustness')
-ylabel('Time Stamps (s)')
+ylim([-1,15])
+xlabel('Time Stamps (s)')
 
 
 hold off
