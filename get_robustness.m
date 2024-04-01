@@ -14,20 +14,4 @@ Rphi = BreachRequirement(phi);
 min_rho = Rphi.Eval(Bdata);
 
 
-% Plotting %
-figure(3)
-dim = [0.6,0.8,0,0.1];
-plot(min_dis,'LineWidth',1.5)
-% ylim([-0.5,2]);
-hold on
-plot(xlim, [1 1]*1, '--k','LineWidth',1.5)
-plot(xlim, [0 0]*1, '--r','LineWidth',1.5)
-str = sprintf('Min Robustness: %.4f', min_rho);
-annotation('textbox',dim,'String',str,'FitBoxToText','on');
-title('Safety Robustness of STL Path')
 
-xlabel('Robustness')
-ylabel('Time Stamps (s)')
-
-
-hold off
