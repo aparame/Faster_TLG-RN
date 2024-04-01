@@ -102,7 +102,7 @@ p2 = plot(model.STL_RRT_path(1,:),model.STL_RRT_path(2,:),'--m','LineWidth',1.2,
 p3 = plot(LTL_path(size(model.goals,3)+1:end,1),LTL_path(size(model.goals,3)+1:end,2),'b','LineWidth',1.2,'DisplayName','LTL');
 p4 = plot(model.STL_path(1,:),model.STL_path(2,:),'r','LineWidth',1.2,'DisplayName','LTL + MILP');
 legend([p1,p2,p3,p4])
-title('Path Planners comparison (Simple Map)')
+title('Path Planners comparison (Complex Map)')
 
 hold off
 
@@ -122,16 +122,18 @@ r4 = plot(model.min_dis,'r','LineWidth',1.2,'DisplayName','LTL + MILP');
 r1 = plot(model.min_dis,'--k','LineWidth',1.2, 'DisplayName','A*');
 [model.min_dis,model.min_rho] = get_robustness(model.STL_RRT_path',map);     % STL spec min_d[t] > 1
 r2 = plot(model.min_dis,'--m','LineWidth',1.2,'DisplayName','RRT*');
-r5 = plot(xlim, [1 1]*1, '--c','LineWidth',1.5,'DisplayName','Min safety \rho_{min}');
+r5 = plot(xlim, [1 1]*1, '--c','LineWidth',1.5,'DisplayName','\rho_{min} = 1');
 % plot(xlim, [0 0]*1, '--r','LineWidth',1.5)
 legend([r1,r2,r3,r4,r5])
-title('Safety Robustness')
+
 if strcmp('simpleMap',mapName)
     xlim([0,90])
     ylabel('Robustness \rho(\phi_1)')
+    title('Safety Robustness (Simple Map)')
 else
     xlim([0,275])
     ylabel('Robustness \rho(\phi_2)')
+    title('Safety Robustness (Complex Map)')
 end
 ylim([-1,15])
 xlabel('Time Stamps (s)')
