@@ -1,5 +1,3 @@
-Here’s an updated README file incorporating the NuSMV solver along with the revised example steps:
-
 ---
 
 # Temporal Logic Guided Robot Navigation (TLG-RN)
