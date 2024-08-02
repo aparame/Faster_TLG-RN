@@ -1,4 +1,4 @@
-# STL+LTL-MECC2024
+# Faster Temporal Logic Guided Robotic Navigation
 
 
 
