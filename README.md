@@ -1,4 +1,4 @@
----
+[![DOI](https://zenodo.org/badge/837384417.svg)](https://doi.org/10.5281/zenodo.14806785)
 
 # Temporal Logic Guided Robot Navigation (TLG-RN)
 An MILP Approach for faster controller synthesis of ground robot navigation using Linear Temporal Logic specifications. This approach is an improvement over our [previous](https://github.com/aparame/Temporal_Logic_Guided_Robot_Navigation) that used STL based approaches for robotic navigation. This work is to be part of a conference paper to be presented at [MECC 2024](https://mecc2024.a2c2.org/)
