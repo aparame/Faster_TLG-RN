@@ -36,12 +36,23 @@ To test run the code:
 
 **Note**: The robot dynamics used in the code are based on a 2D kinematic ground robot.
 
-## Contact Us
+# Contact Us
 
-For any queries or to report bugs, contact aparame@clemson.edu.
-<!---
-**Parameshwaran, Aditya**, and Yue Wang. Safety Verification and Navigation for Autonomous Vehicles Based on Signal Temporal Logic Constraints. No. 2023-01-0113. SAE Technical Paper, 2023.
+You can contact aparame@clemson.edu for any queries or to report any bugs in the code.
+If you feel like using our work, please cite us at :
 
---->
+```
+@article{parameshwaran2024temporal,
+  title={Temporal Logic Guided Safe Navigation for Autonomous Vehicles},
+  author={Parameshwaran, Aditya and Wang, Yue},
+  journal={IFAC-PapersOnLine},
+  volume={58},
+  number={28},
+  pages={1067--1072},
+  year={2024},
+  publisher={Elsevier}
+}
+```
+**Parameshwaran, Aditya**, and Yue Wang. "Temporal Logic Guided Safe Navigation for Autonomous Vehicles." IFAC-PapersOnLine 58.28 (2024): 1067-1072.
 
 Feel free to adjust any specific details as needed!
